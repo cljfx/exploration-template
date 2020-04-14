@@ -1,0 +1,10 @@
+# idea
+/.idea
+/cljfx-exploration-template.iml
+
+# lein
+/.lein-repl-history
+/target
+
+# clj
+/.cpcache

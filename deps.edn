@@ -1,0 +1,1 @@
+{:deps {cljfx {:mvn/version "1.6.8"}}}
