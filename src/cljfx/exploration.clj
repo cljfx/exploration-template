@@ -1,11 +1,10 @@
 (ns cljfx.exploration
   (:require [cljfx.api :as fx]
-            [user :refer [fx-help]]
-            [clj-http.client :as http]))
+            [user :refer [fx-help]]))
 
 ;; view
 
-(defn root-view [{:keys [showing] :as state}]
+(defn root-view [{:keys [showing]}]
   {:fx/type :stage
    :showing showing
    :width 960
@@ -31,33 +30,13 @@
 (defonce *state
   (atom {:showing true}))
 
-(defn http-effect
-  "If you want to perform http requests as a response to user actions, you can return
-  `:http` effects from `handle` methods, for example:
-  {:http {:method :get
-          :url \"https://xkcd.com/614/info.0.json\"
-          :as :json
-          :on-response {::event ::on-response}
-          :on-exception {::event ::on-exception}}"
-  [v dispatch!]
-  (try
-    (http/request
-      (-> v
-          (assoc :async true)
-          (dissoc :on-response :on-exception))
-      #(dispatch! (assoc (:on-response v) :response %))
-      #(dispatch! (assoc (:on-exception v) :exception %)))
-    (catch Exception e
-      (dispatch! (assoc (:on-exception v) :exception e)))))
-
 (def map-event-handler
   (-> handle
       (fx/wrap-co-effects
         {:state (fx/make-deref-co-effect *state)})
       (fx/wrap-effects
         {:set-state (fx/make-reset-effect *state)
-         :dispatch fx/dispatch-effect
-         :http http-effect})))
+         :dispatch fx/dispatch-effect})))
 
 (defonce renderer
   (fx/create-renderer
