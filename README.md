@@ -25,4 +25,24 @@ will open a window managed by cljfx using state in an atom. You can use `(fx-hel
 
 ### Useful links 
 - [cljfx examples](https://github.com/cljfx/cljfx/tree/master/examples)
-- [javafx javadoc](https://openjfx.io/javadoc/14/index.html)  
+- [javafx javadoc](https://openjfx.io/javadoc/14/index.html)
+
+### Exploration idea
+
+If you don't have anything in particular in mind, you could try building an app that 
+generates a sequence of random numbers and shows them as a line chart:
+1. Add a `:button` with a `:text` and `:on-action` handler that puts a sequence of random
+numbers to state atom;
+2. Add a chart that shows this sequence of random numbers (see 
+[chart examples](https://github.com/cljfx/cljfx/blob/master/examples/e14_charts.clj));
+
+You can use layout containers like `:v-box` or `:h-box` to place UI elements like charts
+and buttons next to each other.
+
+For extra points, instead of a button that generates series of random numbers you can use 
+a [text field to input a number](https://github.com/cljfx/cljfx/blob/master/examples/e29_text_formatter.clj) 
+and generate Collatz Conjecture sequence from that number. The Collatz Conjecture can be 
+summarized as follows:
+> Take any positive integer n. If n is even, divide n by 2. If n is odd, multiply n by 3 
+> and add 1. Repeat the process until 1 is reached. The conjecture states that no matter
+> which number you start with, you will always reach 1 eventually.
