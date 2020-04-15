@@ -40,7 +40,7 @@ You can use layout containers like `:v-box` or `:h-box` to place UI elements lik
 and buttons next to each other.
 
 For extra points, instead of a button that generates series of random numbers you can use 
-a [text field to input a number](https://github.com/cljfx/cljfx/blob/master/examples/e29_text_formatter.clj) 
+a [text field to input a number](https://github.com/cljfx/cljfx/blob/master/examples/e29_text_formatter.clj#L27-L31) 
 and generate Collatz Conjecture sequence from that number. The Collatz Conjecture can be 
 summarized as follows:
 > Take any positive integer n. If n is even, divide n by 2. If n is odd, multiply n by 3 
