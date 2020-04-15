@@ -5,6 +5,7 @@
 # lein
 /.lein-repl-history
 /target
+/.nrepl-port
 
 # clj
 /.cpcache

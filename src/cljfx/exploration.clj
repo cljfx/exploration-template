@@ -1,12 +1,15 @@
 (ns cljfx.exploration
   (:require [cljfx.api :as fx]
-            [user :refer [fx-help]]))
+            [user :refer [fx-help]]
+            [clj-http.client :as http]))
 
 ;; view
 
 (defn root-view [{:keys [showing] :as state}]
   {:fx/type :stage
    :showing showing
+   :width 960
+   :height 540
    :on-close-request {::event ::close-window}
    :scene {:fx/type :scene
            :root {:fx/type :v-box
@@ -28,15 +31,38 @@
 (defonce *state
   (atom {:showing true}))
 
+(defn http-effect
+  "If you want to perform http requests as a response to user actions, you can return
+  `:http` effects from `handle` methods, for example:
+  {:http {:method :get
+          :url \"https://xkcd.com/614/info.0.json\"
+          :as :json
+          :on-response {::event ::on-response}
+          :on-exception {::event ::on-exception}}"
+  [v dispatch!]
+  (try
+    (http/request
+      (-> v
+          (assoc :async true)
+          (dissoc :on-response :on-exception))
+      #(dispatch! (assoc (:on-response v) :response %))
+      #(dispatch! (assoc (:on-exception v) :exception %)))
+    (catch Exception e
+      (dispatch! (assoc (:on-exception v) :exception e)))))
+
+(def map-event-handler
+  (-> handle
+      (fx/wrap-co-effects
+        {:state (fx/make-deref-co-effect *state)})
+      (fx/wrap-effects
+        {:set-state (fx/make-reset-effect *state)
+         :dispatch fx/dispatch-effect
+         :http http-effect})))
+
 (defonce renderer
   (fx/create-renderer
     :middleware (fx/wrap-map-desc #'root-view)
-    :opts {:fx.opt/map-event-handler (-> handle
-                                         (fx/wrap-co-effects
-                                           {:state (fx/make-deref-co-effect *state)})
-                                         (fx/wrap-effects
-                                           {:set-state (fx/make-reset-effect *state)
-                                            :dispatch fx/dispatch-effect}))}))
+    :opts {:fx.opt/map-event-handler #'map-event-handler}))
 
 (fx/mount-renderer *state renderer)
 
@@ -53,8 +79,8 @@
 
 
 
-  ;; when in doubt, you can use `help` function...
-  ;; - to get short overall javafx/cljfx components overview:
+  ;; when in doubt, you can use `fx-help` function:
+  ;; - to get short overall javafx/cljfx components overview
   (fx-help)
   ;; - to list all available props on a particular built-in component
   (fx-help :v-box)

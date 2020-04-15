@@ -1,1 +1,3 @@
-{:deps {cljfx {:mvn/version "1.6.8"}}}
+{:deps {cljfx {:mvn/version "1.6.8"}
+        clj-http {:mvn/version "3.10.1"}
+        cheshire {:mvn/version "5.10.0"}}}
