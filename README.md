@@ -7,8 +7,8 @@ hacking!
 ### Cloning
 
 ```sh
-git clone https://github.com/cljfx/exploration-template.git
-cd exploration-template 
+git clone https://github.com/cljfx/exploration-template.git cljfx-exploration
+cd cljfx-exploration
 ```
 
 ### Booting up a repl
